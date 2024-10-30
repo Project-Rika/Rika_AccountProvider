@@ -12,9 +12,10 @@ public class UserEntity
     public string LastName { get; set; } = null!;
     [Required]
     public string Email { get; set; } = null!;
-    public bool EmailConfirmed { get; set; } = false;
+    public bool isEmailConfirmed { get; set; } = false;
     [Required]
     public string Password { get; set; } = null!;
+    public string Role { get; set; } = null!;
 
     public string? PhoneNumber { get; set; }
     public string? ProfileImageUrl { get; set; }
