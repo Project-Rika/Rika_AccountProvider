@@ -37,8 +37,8 @@
     <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Functions\" />
     <Folder Include="Factories\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 </Project>
