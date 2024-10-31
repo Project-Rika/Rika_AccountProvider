@@ -13,19 +13,19 @@ public class UserService(DataContext context, IUserRepository userRepository) : 
 	private readonly DataContext _context = context;
 	private readonly IUserRepository _userRepository = userRepository;
 
-	public async Task<ActionResult<UpdateUserDto>> UpdateUserAsync(UpdateUserDto updateUserDto)
+	public async Task<IActionResult> UpdateUserAsync(UpdateUserDto updateUserDto)
 	{
 		try
 		{
 			if (updateUserDto != null)
 			{
-				var existingUser = await _userRepository.GetUserAsync(updateUserDto.UserId);
+				var existingUser = await GetUserAsync(updateUserDto.UserId);
 				if (existingUser != null)
 				{
 					var mappedEntity = UpdateUserFactory.UpdateUserEntity(updateUserDto, existingUser);
 					if (mappedEntity != null)
 					{
-						var result = _userRepository.UpdateUserAsync(mappedEntity);
+						var result = await _userRepository.UpdateUserAsync(mappedEntity);
 						if (result != null)
 						{
 							var mappedDto = UpdateUserFactory.UpdateUserDto(existingUser);

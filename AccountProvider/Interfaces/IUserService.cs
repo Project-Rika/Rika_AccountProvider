@@ -6,5 +6,5 @@ namespace AccountProvider.Interfaces;
 
 public interface IUserService
 {
-	Task<ActionResult<UpdateUserDto>> UpdateUserAsync(UpdateUserDto updateUserDto);
+	Task<IActionResult> UpdateUserAsync(UpdateUserDto updateUserDto);
 }
