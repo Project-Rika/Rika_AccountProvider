@@ -38,6 +38,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Functions\" />
-    <Folder Include="Factories\" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 ﻿using AccountProvider.Context;
 using AccountProvider.Entities;
+using AccountProvider.Factories;
 using AccountProvider.Interfaces;
 using AccountProvider.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -9,11 +10,11 @@ namespace AccountProvider.Services;
 
 public class UserService(DataContext context, IUserRepository userRepository) : IUserService
 {
-    private readonly DataContext _context = context;
+	private readonly DataContext _context = context;
 	private readonly IUserRepository _userRepository = userRepository;
 
 	public async Task<ActionResult<UpdateUserDto>> UpdateUserAsync(UpdateUserDto updateUserDto)
-    {
+	{
 		try
 		{
 			if (updateUserDto != null)
@@ -21,13 +22,13 @@ public class UserService(DataContext context, IUserRepository userRepository) : 
 				var existingUser = await _userRepository.GetUserAsync(updateUserDto.UserId);
 				if (existingUser != null)
 				{
-					var mappedEntity = _userFactory.UpdateDtoToEntity(updateUserDto, existingUser);
+					var mappedEntity = UpdateUserFactory.UpdateUserEntity(updateUserDto, existingUser);
 					if (mappedEntity != null)
 					{
 						var result = _userRepository.UpdateUserAsync(mappedEntity);
 						if (result != null)
 						{
-							var mappedDto = _userFactory.UpdateEntityToDto(updateUserDto, existingUser);
+							var mappedDto = UpdateUserFactory.UpdateUserDto(existingUser);
 							if (mappedDto != null)
 							{
 								return new OkObjectResult(mappedDto);
