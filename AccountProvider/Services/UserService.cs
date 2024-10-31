@@ -1,15 +1,54 @@
 ﻿using AccountProvider.Context;
+using AccountProvider.Entities;
 using AccountProvider.Interfaces;
 using AccountProvider.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace AccountProvider.Services;
 
-public class UserService(DataContext context) : IUserService
+public class UserService(DataContext context, IUserRepository userRepository) : IUserService
 {
     private readonly DataContext _context = context;
+	private readonly IUserRepository _userRepository = userRepository;
 
-    public Task<UpdateUserDto> UpdateUserAsync(UpdateUserDto updateUserDto)
+	public async Task<ActionResult<UpdateUserDto>> UpdateUserAsync(UpdateUserDto updateUserDto)
     {
-        throw new NotImplementedException();
-    }
+		try
+		{
+			if (updateUserDto != null)
+			{
+				var existingUser = await _userRepository.GetUserAsync(updateUserDto.UserId);
+				if (existingUser != null)
+				{
+					var mappedEntity = _userFactory.UpdateDtoToEntity(updateUserDto, existingUser);
+					if (mappedEntity != null)
+					{
+						var result = _userRepository.UpdateUserAsync(mappedEntity);
+						if (result != null)
+						{
+							var mappedDto = _userFactory.UpdateEntityToDto(updateUserDto, existingUser);
+							if (mappedDto != null)
+							{
+								return new OkObjectResult(mappedDto);
+							}
+						}
+					}
+				}
+				else
+				{
+					return new NotFoundResult();
+				}
+			}
+			else
+			{
+				return new BadRequestResult();
+			}
+		}
+		catch (Exception ex)
+		{
+			Debug.WriteLine("ERROR :: " + ex.Message);
+		}
+		return new StatusCodeResult(500);
+	}
 }
