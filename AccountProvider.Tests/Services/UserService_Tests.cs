@@ -20,21 +20,22 @@ public class UserService_Tests
     public async Task GetUserAsync_ThenReturnUserById()
     {
         // Arrange
-        var userId = "2";
+        var userId = "1";
         var userDto = new GetUserDto
         {
             Id = userId
         };
 
         _mockUserService.Setup(x => x.GetUserAsync(userId))
-            .ReturnsAsync(userDto);
+            .ReturnsAsync((GetUserDto?)userDto);
 
 
-        // Act
-        var result = await _mockUserService.Object.GetUserAsync(userId);
-
+		// Act
+		var result = await _mockUserService.Object.GetUserAsync(userId);
+        var statusCode = result != null ? "200" : "400";
         // Assert
         Assert.NotNull(result);
+        Assert.Equal("200", statusCode);
         Assert.Equal(userId, result.Id);
     }
 
@@ -54,22 +55,12 @@ public class UserService_Tests
 
         // Act
         var result = await _mockUserService.Object.GetUserAsync(userId);
+		var statusCode = result != null ? "200" : "400";
 
-        // Assert
-        Assert.Null(result);
-        
-    }
-    /*
-
-    
-    Testfall 2: Användaren hämtas inte från databasen
-    Förutsättningar: Användaren som ska hämtas finns inte i databasen.
-    Steg 1: Sök efter ett UserId eller email som inte finns i databasen.
-    Steg 2: Returnera relevant statuskod.
-    Förväntat resultat: Ingen användare hämtas och relevant statuskod returneras.
-
-
-    */
+		// Assert
+		Assert.Null(result);
+		Assert.Equal("400", statusCode);
+	}
 
 }
 
