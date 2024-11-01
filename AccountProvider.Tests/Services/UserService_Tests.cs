@@ -3,6 +3,7 @@ using AccountProvider.Interfaces;
 using AccountProvider.Models;
 using Grpc.Core;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 
 namespace AccountProvider.Tests.Services;
@@ -32,49 +33,36 @@ public class UserService_Tests
 			Gender = "test"
 		};
 
-		_mockUserService.Setup(x => x.UpdateUserAsync(updatedUserDto)).ReturnsAsync(updatedUserDto);
+		_mockUserService.Setup(x => x.UpdateUserAsync(updatedUserDto)).ReturnsAsync(new OkObjectResult(updatedUserDto));
 
 		// Act
 		var result = await _mockUserService.Object.UpdateUserAsync(updatedUserDto);
-		var statusCode = "";
-		if (result != null)
-		{
-			statusCode = "200";
-		}
-		else
-		{
-			statusCode = "400";
-		}
 
 		// Assert
 		Assert.NotNull(result);
-		Assert.Equal(updatedUserDto, result);
-		Assert.Equal("200", statusCode);
+
+		var okResult = Assert.IsType<OkObjectResult>(result);
+		Assert.Equal(200, okResult.StatusCode);
+
+		var returnedDto = Assert.IsType<UpdateUserDto>(okResult.Value);
+		Assert.Equal(updatedUserDto, returnedDto);
 	}
 
 	[Fact]
-	public async Task UpdateUserAsync_ShouldNotUpdateUser_AndReturnNull_AndStatusCode_400()
+	public async Task UpdateUserAsync_ShouldNotUpdateUser_AndReturn_StatusCode_400()
 	{
 		// Arrange
 		UpdateUserDto? updatedUserDto = null;
-		_mockUserService.Setup(x => x.UpdateUserAsync(updatedUserDto)).ReturnsAsync(updatedUserDto);
+		_mockUserService.Setup(x => x.UpdateUserAsync(updatedUserDto)).ReturnsAsync(new BadRequestResult());
 
 		// Act
 		var result = await _mockUserService.Object.UpdateUserAsync(updatedUserDto);
-		var statusCode = "";
-		if (result == null)
-		{
-			statusCode = "400";
-		}
-		else
-		{
-			statusCode = "200";
-		}
 
 		// Assert
-		Assert.Null(result);
-		Assert.Equal(updatedUserDto, result);
-		Assert.Equal("400", statusCode);
+		Assert.NotNull(result);
+
+		var okResult = Assert.IsType<BadRequestResult>(result);
+		Assert.Equal(400, okResult.StatusCode);
 	}
 
 	[Fact]
@@ -102,22 +90,16 @@ public class UserService_Tests
 			string.IsNullOrWhiteSpace(u.ProfileImageUrl) ||
 			u.Age <= 0 ||
 			string.IsNullOrWhiteSpace(u.Gender))))
-			.ReturnsAsync((UpdateUserDto?)null);
+			.ReturnsAsync(new BadRequestResult());
 
 		// Act
 		var result = await _mockUserService.Object.UpdateUserAsync(updatedUserDto);
-		var statusCode = "";
-		if (result == null)
-		{
-			statusCode = "400";
-		}
-		else
-		{
-			statusCode = "200";
-		}
+
 
 		// Assert
-		Assert.Null(result);
-		Assert.Equal("400", statusCode);
+		Assert.NotNull(result);
+
+		var okResult = Assert.IsType<BadRequestResult>(result);
+		Assert.Equal(400, okResult.StatusCode);
 	}
 }
