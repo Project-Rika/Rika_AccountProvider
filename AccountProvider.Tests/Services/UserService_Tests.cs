@@ -1,5 +1,4 @@
 ﻿using AccountProvider.Dtos;
-using AccountProvider.Entities;
 using AccountProvider.Interfaces;
 using Moq;
 

@@ -1,6 +1,8 @@
 ﻿using AccountProvider.Context;
 using AccountProvider.Dtos;
 using AccountProvider.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace AccountProvider.Repositories;
 
