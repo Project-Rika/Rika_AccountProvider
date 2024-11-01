@@ -1,17 +1,27 @@
 ﻿using AccountProvider.Context;
-using AccountProvider.Dtos;
-using AccountProvider.Interfaces;
+using AccountProvider.Entities;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
+using System.Linq.Expressions;
+
 
 namespace AccountProvider.Repositories;
 
-public class UserRepository(DataContext context) : IUserRepository
+public class UserRepository(DataContext context) : Repo<UserEntity>
 {
     private readonly DataContext _context = context;
 
-	public Task<GetUserDto> GetUserAsync(string userId)
-	{
-		throw new NotImplementedException();
-	}
+
+    public override async Task<UserEntity> GetOneUserAsync(Expression<Func<UserEntity, bool>> predciate)
+    {
+        try
+        {
+            var result = await _context.Users.FirstOrDefaultAsync(predciate);
+            return result;
+        }
+        catch (Exception ex) 
+        {
+           throw new Exception(ex.Message);
+        }
+       
+    }
 }
