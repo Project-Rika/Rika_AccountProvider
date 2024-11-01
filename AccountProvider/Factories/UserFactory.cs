@@ -25,8 +25,7 @@ namespace AccountProvider.Factories
 			return user;
 		}
 
-		
+
 	}
 
 }
-

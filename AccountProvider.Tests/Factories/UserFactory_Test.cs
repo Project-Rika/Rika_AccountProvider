@@ -14,7 +14,8 @@ public class UserFactory_Test
 
 		var mockUserRepository = new Mock<IUserRepository>();
 		mockUserRepository.Setup(repo => repo.GetUserAsync(userId))
-			.ReturnsAsync(new GetUserDto {
+			.ReturnsAsync(new GetUserDto
+			{
 				Id = userId,
 				FirstName = "Gustav",
 				LastName = "klaesson",
