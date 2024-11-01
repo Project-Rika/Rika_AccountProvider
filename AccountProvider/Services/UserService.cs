@@ -19,7 +19,7 @@ public class UserService(DataContext context, IUserRepository userRepository) : 
 		{
 			if (updateUserDto != null)
 			{
-				var existingUser = await GetUserAsync(updateUserDto.UserId);
+				var existingUser = await _userRepository.GetOneUserAsync(x => x.Id == updateUserDto.UserId);
 				if (existingUser != null)
 				{
 					var mappedEntity = UpdateUserFactory.UpdateUserEntity(updateUserDto, existingUser);
