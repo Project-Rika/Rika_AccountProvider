@@ -1,4 +1,7 @@
 using AccountProvider.Context;
+using AccountProvider.Interfaces;
+using AccountProvider.Repositories;
+using AccountProvider.Services;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +15,8 @@ var host = new HostBuilder()
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
         services.AddDbContext<DataContext>(x => x.UseSqlServer(Environment.GetEnvironmentVariable("DATABASE")));
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserService, UserService>();
     })
     .Build();
 using (var scope = host.Services.CreateScope())
@@ -19,10 +24,10 @@ using (var scope = host.Services.CreateScope())
     try
     {
         var context = scope.ServiceProvider.GetService<DataContext>();
-        var migration = context.Database.GetPendingMigrations();
+        var migration = context?.Database.GetPendingMigrations();
         if (migration != null && migration.Any())
         {
-            context.Database.Migrate();
+            context?.Database.Migrate();
         }
     }
     catch (Exception ex)
