@@ -1,6 +1,9 @@
+﻿using AccountProvider.Context;
+using AccountProvider.Dtos;
+
 ﻿using System.Security.Cryptography;
-using AccountProvider.Context;
 using AccountProvider.Entities;
+
 using AccountProvider.Interfaces;
 using System.Text;
 using AccountProvider.Models;
@@ -68,4 +71,10 @@ public class UserService(DataContext context,IUserRepository userRepository) : I
         return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
     }
 
+  
+    public Task<GetUserDto> GetUserAsync(string userId)
+    {
+        throw new NotImplementedException();
+    }
 }
+

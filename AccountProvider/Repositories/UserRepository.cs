@@ -3,6 +3,8 @@ using AccountProvider.Interfaces;
 using AccountProvider.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Linq.Expressions;
+
 
 
 namespace AccountProvider.Repositories;
@@ -25,10 +27,23 @@ public class UserRepository(DataContext context) : IUserRepository
             await _context.SaveChangesAsync();
         }
         catch (Exception ex)
-        { 
+        {
             Debug.WriteLine($"An error occurred: {ex.Message}");
         }
 
     }
-}
 
+    public async Task<UserEntity> GetUserAsync(Expression<Func<UserEntity, bool>> predciate)
+    {
+        try
+        {
+            var result = await _context.Users.FirstOrDefaultAsync(predciate);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
+    }
+
+}

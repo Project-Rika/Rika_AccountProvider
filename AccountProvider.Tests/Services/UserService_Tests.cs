@@ -1,11 +1,10 @@
-﻿using AccountProvider.Entities;
+﻿using AccountProvider.Dtos;
 using AccountProvider.Interfaces;
+﻿using AccountProvider.Entities;
 using AccountProvider.Models;
-using AccountProvider.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System.Threading.Tasks;
-using Xunit;
+
 
 namespace AccountProvider.Tests.Services;
 
@@ -18,6 +17,55 @@ public class UserService_Tests
         _mockUserService = new Mock<IUserService>();
  
     }
+
+
+
+
+    [Fact]
+    public async Task GetUserAsync_ThenReturnUserById()
+    {
+        // Arrange
+        var userId = "1";
+        var userDto = new GetUserDto
+        {
+            Id = userId
+        };
+
+        _mockUserService.Setup(x => x.GetUserAsync(userId))
+            .ReturnsAsync((GetUserDto?)userDto);
+
+
+		// Act
+		var result = await _mockUserService.Object.GetUserAsync(userId);
+        var statusCode = result != null ? "200" : "400";
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal("200", statusCode);
+        Assert.Equal(userId, result.Id);
+    }
+
+    
+    [Fact]
+    public async Task GetUserAsync_WhileNotExistingReturnNotFound ()
+    {
+        // Arrange
+        var userId = "999";
+        var userDto = new GetUserDto
+        {
+            Id = userId
+        };
+
+        _mockUserService.Setup(x => x.GetUserAsync(userId))
+            .ReturnsAsync((GetUserDto?)null);
+
+        // Act
+        var result = await _mockUserService.Object.GetUserAsync(userId);
+		var statusCode = result != null ? "200" : "400";
+
+		// Assert
+		Assert.Null(result);
+		Assert.Equal("400", statusCode);
+	}
 
     [Fact]
     public async Task CreateUserAsync_ShouldCreateUser_AndReturnCreatedResult_WithStatusCode_201()
@@ -128,5 +176,11 @@ public class UserService_Tests
         var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
         Assert.Equal(500, statusCodeResult.StatusCode);
     }
-
 }
+
+
+
+
+
+
+
