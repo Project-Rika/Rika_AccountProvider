@@ -4,8 +4,6 @@ namespace AccountProvider.Entities;
 
 public class UserEntity
 {
-    public int userid;
-
     [Key]
     public string Id { get; set; } = Guid.NewGuid().ToString();
     [Required]

@@ -1,7 +1,6 @@
-using AccountProvider.Dtos;
+using AccountProvider.Entities;
 using AccountProvider.Interfaces;
 ﻿using AccountProvider.Context;
-using AccountProvider.Entities;
 using AccountProvider.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -28,20 +27,19 @@ public class UserRepository_Tests
     }
 
     [Fact]
-
     public async Task GetUserAsync_ThenReturnUserById()
     {
         // Arrange
         var userId = "1";
-        var userDto = new GetUserDto
+        var userEntity = new UserEntity
         {
             Id = userId
         };
-        _mockUserRepository.Setup(x => x.GetUserAsync(userId))
-        .ReturnsAsync((GetUserDto?)userDto);
+        _mockUserRepository.Setup(x => x.GetUserAsync(x => x.Id == userId))
+        .ReturnsAsync((UserEntity?)userEntity);
 
         // Act
-        var result = await _mockUserRepository.Object.GetUserAsync(userId);
+        var result = await _mockUserRepository.Object.GetUserAsync(x => x.Id == userId);
         var statusCode = result != null ? "200" : "400";
 
         // Assert
@@ -56,15 +54,15 @@ public class UserRepository_Tests
     {
         // Arrange
         var userId = "7679";
-        var userDto = new GetUserDto
+        var userDto = new UserEntity
         {
             Id = userId
         };
-        _mockUserRepository.Setup(x => x.GetUserAsync(userId))
-            .ReturnsAsync((GetUserDto?)null);
+        _mockUserRepository.Setup(x => x.GetUserAsync(x => x.Id == userId))
+            .ReturnsAsync((UserEntity?)null);
 
         // Act
-        var result = await _mockUserRepository.Object.GetUserAsync(userId);
+        var result = await _mockUserRepository.Object.GetUserAsync(x => x.Id == userId);
 		var statusCode = result != null ? "200" : "400";
 
         // Assert
@@ -95,6 +93,7 @@ public class UserRepository_Tests
         Assert.NotNull(result);
         Assert.Equal("john.doe@example.com", result?.Email);
     }
+
     [Fact]
     public async Task GetByEmailAsync_ShouldReturnNull_WhenUserDoesNotExist()
     {
@@ -126,5 +125,133 @@ public class UserRepository_Tests
         // Assert
         Assert.NotNull(result);
         Assert.Equal("jane.smith@example.com", result?.Email);
+    }
+
+    [Fact]
+    public async Task UpdateUserAsync_ShouldUpdateUser_AndReturnUpdated_UserEntity()
+    {
+        // Arrange
+        UserEntity userEntity = new UserEntity
+        {
+            FirstName = "Test",
+            LastName = "Test",
+            Email = "Test",
+            IsEmailConfirmed = false,
+            Password = "Test",
+            Role = "Test",
+            PhoneNumber = "Test",
+            ProfileImageUrl = "Test",
+            Age = 1,
+            Gender = "Test",
+            AddressId = "Test"
+        };
+
+        UserEntity updatedUserEntity = new UserEntity
+        {
+            FirstName = "updatedTest",
+            LastName = "updatedTest",
+            Email = "updatedTest",
+            IsEmailConfirmed = true,
+            Password = "updatedTest",
+            Role = "updatedTest",
+            PhoneNumber = "updatedTest",
+            ProfileImageUrl = "updatedTest",
+            Age = 2,
+            Gender = "updatedTest",
+            AddressId = "updatedTest"
+        };
+
+        _mockUserRepository.Setup(x => x.UpdateUserAsync(updatedUserEntity)).ReturnsAsync(updatedUserEntity);
+
+        // Act
+        var result = await _mockUserRepository.Object.UpdateUserAsync(updatedUserEntity);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(updatedUserEntity, result);
+    }
+
+    [Fact]
+    public async Task UpdateUserAsync_ShouldNotUpdateUser_AndReturnNull()
+    {
+        // Arrange
+        UserEntity userEntity = new UserEntity
+        {
+            FirstName = "Test",
+            LastName = "Test",
+            Email = "Test",
+            IsEmailConfirmed = false,
+            Password = "Test",
+            Role = "Test",
+            PhoneNumber = "Test",
+            ProfileImageUrl = "Test",
+            Age = 1,
+            Gender = "Test",
+            AddressId = "Test"
+        };
+
+        UserEntity? updatedUserEntity = null;
+
+        _mockUserRepository.Setup(x => x.UpdateUserAsync(updatedUserEntity)).ReturnsAsync(updatedUserEntity);
+
+        // Act
+        var result = await _mockUserRepository.Object.UpdateUserAsync(updatedUserEntity);
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task UpdateUserAsync_ShouldNotUpdateUser_BecauseEmptyField_AndReturnNull()
+    {
+        // Arrange
+        UserEntity userEntity = new UserEntity
+        {
+            FirstName = "Test",
+            LastName = "Test",
+            Email = "Test",
+            IsEmailConfirmed = false,
+            Password = "Test",
+            Role = "Test",
+            PhoneNumber = "Test",
+            ProfileImageUrl = "Test",
+            Age = 1,
+            Gender = "Test",
+            AddressId = "Test"
+        };
+
+        UserEntity updatedUserEntity = new UserEntity
+        {
+            FirstName = "",
+            LastName = "updatedTest",
+            Email = "updatedTest",
+            IsEmailConfirmed = true,
+            Password = "updatedTest",
+            Role = "updatedTest",
+            PhoneNumber = "updatedTest",
+            ProfileImageUrl = "updatedTest",
+            Age = 2,
+            Gender = "updatedTest",
+            AddressId = "updatedTest"
+        };
+
+        _mockUserRepository.Setup(x => x.UpdateUserAsync(It.Is<UserEntity>(u =>
+            string.IsNullOrWhiteSpace(u.FirstName) ||
+            string.IsNullOrWhiteSpace(u.LastName) ||
+            string.IsNullOrWhiteSpace(u.Email) ||
+            string.IsNullOrWhiteSpace(u.Password) ||
+            string.IsNullOrWhiteSpace(u.Role) ||
+            string.IsNullOrWhiteSpace(u.PhoneNumber) ||
+            string.IsNullOrWhiteSpace(u.ProfileImageUrl) ||
+            u.Age <= 0 ||
+            string.IsNullOrWhiteSpace(u.Gender) ||
+            string.IsNullOrWhiteSpace(u.AddressId))))
+        .ReturnsAsync((UserEntity?)null);
+
+        // Act
+        var result = await _mockUserRepository.Object.UpdateUserAsync(updatedUserEntity);
+
+        // Assert
+        Assert.Null(result);
     }
 }

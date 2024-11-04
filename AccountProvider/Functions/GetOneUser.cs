@@ -30,7 +30,7 @@ public class GetOneUser
                 return new BadRequestObjectResult("UserId is required.");
             }
 
-            var user = await _repositry.GetOneUserAsync(u => u.Id == userId);
+            var user = await _repositry.GetUserAsync(u => u.Id == userId);
 
             if (user == null)
             {
