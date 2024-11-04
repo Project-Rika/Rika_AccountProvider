@@ -15,7 +15,6 @@ var host = new HostBuilder()
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
         services.AddDbContext<DataContext>(x => x.UseSqlServer(Environment.GetEnvironmentVariable("DATABASE")));
-
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IUserRepository, UserRepository>();
     })
@@ -25,10 +24,10 @@ using (var scope = host.Services.CreateScope())
     try
     {
         var context = scope.ServiceProvider.GetService<DataContext>();
-        var migration = context.Database.GetPendingMigrations();
+        var migration = context?.Database.GetPendingMigrations();
         if (migration != null && migration.Any())
         {
-            context.Database.Migrate();
+            context?.Database.Migrate();
         }
     }
     catch (Exception ex)
