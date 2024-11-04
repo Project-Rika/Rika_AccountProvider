@@ -1,6 +1,7 @@
 ﻿using AccountProvider.Context;
 using AccountProvider.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Linq.Expressions;
 
 
@@ -9,7 +10,7 @@ namespace AccountProvider.Repositories;
 public class UserRepository(DataContext context) : Repo<UserEntity>
 {
     private readonly DataContext _context = context;
-
+   
 
     public override async Task<UserEntity> GetOneUserAsync(Expression<Func<UserEntity, bool>> predciate)
     {
@@ -20,7 +21,7 @@ public class UserRepository(DataContext context) : Repo<UserEntity>
         }
         catch (Exception ex) 
         {
-           throw new Exception(ex.Message);
+            return null; 
         }
        
     }

@@ -10,8 +10,10 @@ public class Repo<TEntity> : IRepo<TEntity> where TEntity : class
 {
 
     private readonly DataContext _context;
+    private DataContext context;
 
-    
+   
+
     public virtual Task<TEntity> GetOneUserAsync(Expression<Func<TEntity, bool>> predciate)
     {
         try
