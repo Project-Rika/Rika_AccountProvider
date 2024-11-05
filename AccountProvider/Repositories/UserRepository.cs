@@ -1,16 +1,15 @@
 ﻿using AccountProvider.Context;
-using AccountProvider.Interfaces;
 using AccountProvider.Entities;
-using Microsoft.EntityFrameworkCore;
+using AccountProvider.Interfaces;
 using System.Diagnostics;
-
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace AccountProvider.Repositories;
 
 public class UserRepository(DataContext context) : IUserRepository
 {
     private readonly DataContext _context = context;
-
 
     public async Task<UserEntity?> GetByEmailAsync(string email)
     {
@@ -29,6 +28,42 @@ public class UserRepository(DataContext context) : IUserRepository
             Debug.WriteLine($"An error occurred: {ex.Message}");
         }
 
+    }
+
+    public async Task<UserEntity> GetUserAsync(Expression<Func<UserEntity, bool>> predciate)
+    {
+        try
+        {
+            var result = await _context.Users.FirstOrDefaultAsync(predciate);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
+    }
+
+    public async Task<UserEntity?> UpdateUserAsync(UserEntity userEntity)
+    {
+        try
+        {
+            if (userEntity != null)
+            {
+                _context.Users.Update(userEntity);
+                var result = await _context.SaveChangesAsync();
+
+                if (result > 0)
+                {
+                    return userEntity;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+           Debug.WriteLine("ERROR :: " + ex.Message);
+        }
+
+        return null;
     }
 }
 

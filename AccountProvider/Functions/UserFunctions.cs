@@ -1,11 +1,9 @@
 ﻿using System.Net;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using System.Threading.Tasks;
 using AccountProvider.Interfaces;
-using Microsoft.Extensions.Logging;
-using AccountProvider.Entities;
 using AccountProvider.Models;
+
 
 namespace AccountProvider.Functions
 {
