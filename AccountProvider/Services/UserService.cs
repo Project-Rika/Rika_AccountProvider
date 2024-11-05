@@ -103,5 +103,10 @@ public class UserService(DataContext context, IUserRepository userRepository) : 
         }
         return new StatusCodeResult(500);
     }
+
+    public Task<IEnumerable<GetUserDto>> GetAllUsersAsync()
+    {
+        throw new NotImplementedException();
+    }
 }
 

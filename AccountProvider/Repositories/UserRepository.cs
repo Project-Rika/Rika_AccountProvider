@@ -65,5 +65,19 @@ public class UserRepository(DataContext context) : IUserRepository
 
         return null;
     }
+
+    public async Task<IEnumerable<UserEntity>> GetAllUsersAsync()
+    {
+        try
+        {
+            return await _context.Users.ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("ERROR :: " + ex.Message);
+        }
+
+        return Enumerable.Empty<UserEntity>();
+    }
 }
 
