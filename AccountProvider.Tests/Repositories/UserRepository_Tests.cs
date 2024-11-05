@@ -71,7 +71,7 @@ public class UserRepository_Tests
             LastName = "Smith",
             Email = "jane.smith@example.com",
             Password = "SecurePassword123",
-            Role = "User" 
+            Role = "User"
         };
 
         // Act

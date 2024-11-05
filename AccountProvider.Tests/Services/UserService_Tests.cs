@@ -16,7 +16,7 @@ public class UserService_Tests
     public UserService_Tests()
     {
         _mockUserService = new Mock<IUserService>();
- 
+
     }
 
     [Fact]
@@ -56,7 +56,7 @@ public class UserService_Tests
         // Arrange
         var createUserDto = new CreateUserDto
         {
-            FirstName = "", 
+            FirstName = "",
             LastName = "Doe",
             Email = "john.doe@example.com",
             Password = "SecurePassword123"
@@ -117,7 +117,7 @@ public class UserService_Tests
             Email = "john.doe@example.com",
             Password = "SecurePassword123"
         };
-       
+
         _mockUserService.Setup(service => service.CreateUserAsync(createUserDto))
                         .ReturnsAsync(new StatusCodeResult(500));
 

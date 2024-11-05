@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AccountProvider.Services;
 
-public class UserService(DataContext context,IUserRepository userRepository) : IUserService
+public class UserService(DataContext context, IUserRepository userRepository) : IUserService
 {
     private readonly DataContext _context = context;
     private readonly IUserRepository _userRepository = userRepository;
@@ -23,7 +23,7 @@ public class UserService(DataContext context,IUserRepository userRepository) : I
 
     public async Task<IActionResult> CreateUserAsync(CreateUserDto createUserDto)
     {
-        try 
+        try
         {
             if (string.IsNullOrEmpty(createUserDto.FirstName) ||
                 string.IsNullOrEmpty(createUserDto.LastName) ||
@@ -31,7 +31,7 @@ public class UserService(DataContext context,IUserRepository userRepository) : I
                 string.IsNullOrEmpty(createUserDto.Password))
             {
                 return new BadRequestObjectResult("Invalid input data. Please ensure all fields are filled in.");
-            } 
+            }
 
 
             var existingUser = await _userRepository.GetByEmailAsync(createUserDto.Email);
@@ -53,7 +53,7 @@ public class UserService(DataContext context,IUserRepository userRepository) : I
 
 
         }
-        catch(Exception ex) 
+        catch (Exception ex)
         {
             Debug.WriteLine($"An error occurred: {ex.Message}");
             return new StatusCodeResult(500);

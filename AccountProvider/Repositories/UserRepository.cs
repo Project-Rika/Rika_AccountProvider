@@ -25,7 +25,7 @@ public class UserRepository(DataContext context) : IUserRepository
             await _context.SaveChangesAsync();
         }
         catch (Exception ex)
-        { 
+        {
             Debug.WriteLine($"An error occurred: {ex.Message}");
         }
 

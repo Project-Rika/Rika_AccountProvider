@@ -22,7 +22,7 @@ public class CreateUserFactory
                 LastName = createUserDto.LastName,
                 Email = createUserDto.Email,
                 Password = passwordHash,
-                Role = "User", 
+                Role = "User",
                 IsEmailConfirmed = false,
                 PhoneNumber = createUserDto.PhoneNumber,
                 ProfileImageUrl = createUserDto.ProfileImageUrl,

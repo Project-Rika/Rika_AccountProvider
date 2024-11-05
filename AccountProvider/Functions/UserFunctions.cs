@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AccountProvider.Interfaces;
 using Microsoft.Extensions.Logging;
 using AccountProvider.Entities;
-using AccountProvider.Models;  
+using AccountProvider.Models;
 
 namespace AccountProvider.Functions
 {
@@ -19,7 +19,7 @@ namespace AccountProvider.Functions
             FunctionContext executionContext)
         {
             _ = executionContext.GetLogger("CreateUser");
-            
+
             var model = await req.ReadFromJsonAsync<CreateUserDto>();
 
             if (model == null || string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Password))

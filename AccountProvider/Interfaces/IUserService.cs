@@ -7,4 +7,5 @@ public interface IUserService
 {
     Task<UserEntity?> GetUserByEmailAsync(string email);
     Task<IActionResult> CreateUserAsync(CreateUserDto createUserDto);
+    Task<IActionResult> DeleteUserAsync(int userId);
 }
