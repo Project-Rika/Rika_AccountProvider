@@ -8,6 +8,7 @@ public interface IUserRepository
 {
     Task<UserEntity?> UpdateUserAsync(UserEntity userEntity);
     Task<UserEntity> GetUserAsync(Expression<Func<UserEntity, bool>> predicate);
+    Task<IEnumerable<UserEntity>> GetAllUsersAsync();
     Task<UserEntity?>GetByEmailAsync(string email);
     Task CreateUserAsync(UserEntity user);
 }
