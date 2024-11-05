@@ -9,4 +9,5 @@ public interface IUserService
 	Task<IActionResult> UpdateUserAsync(UpdateUserDto updateUserDto);
     Task<UserEntity?> GetUserByEmailAsync(string email);
     Task<IActionResult> CreateUserAsync(CreateUserDto createUserDto);
+	Task<IActionResult> DeleteUserAsync(string userId);
 }

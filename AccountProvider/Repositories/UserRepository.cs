@@ -65,5 +65,32 @@ public class UserRepository(DataContext context) : IUserRepository
 
         return null;
     }
+
+	public async Task<bool> DeleteUserAsync(UserEntity userEntity)
+	{
+		try
+		{
+			if (userEntity != null)
+			{
+				_context.Users.Remove(userEntity);
+				var result = await _context.SaveChangesAsync();
+
+				if (result > 0)
+				{
+					return true;
+				}
+                else
+                {
+                    return false;
+                }
+			}
+		}
+		catch (Exception ex)
+		{
+			Debug.WriteLine("ERROR :: " + ex.Message);
+		}
+
+		return false;
+	}
 }
 
