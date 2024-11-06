@@ -35,11 +35,21 @@ public class UserRepository(DataContext context) : IUserRepository
         try
         {
             var result = await _context.Users.FirstOrDefaultAsync(predciate);
-            return result;
+            if (result != null)
+            {
+                return result;
+
+            }
+            else
+            {
+                return null!;
+            }
+
         }
         catch (Exception ex)
         {
-            return null;
+            Console.WriteLine(ex.Message);
+            throw new Exception("Something went wrong", ex);
         }
     }
 
@@ -60,7 +70,7 @@ public class UserRepository(DataContext context) : IUserRepository
         }
         catch (Exception ex)
         {
-           Debug.WriteLine("ERROR :: " + ex.Message);
+            Debug.WriteLine("ERROR :: " + ex.Message);
         }
 
         return null;
