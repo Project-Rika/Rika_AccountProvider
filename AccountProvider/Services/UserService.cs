@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Text;
 using System.Security.Cryptography;
+using System.Linq.Expressions;
 
 namespace AccountProvider.Services;
 
@@ -97,6 +98,47 @@ public class UserService(DataContext context, IUserRepository userRepository) : 
                 return new BadRequestResult();
             }
         }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("ERROR :: " + ex.Message);
+        }
+        return new StatusCodeResult(500);
+    }
+
+    public async Task<IActionResult> GetUserAsync(Expression<Func<UserEntity, bool>> predicate)
+    {
+        try
+        {
+
+            if (predicate != null)
+            {
+                var userEntity = await _userRepository.GetUserAsync(predicate);
+
+                if (userEntity != null) 
+                {
+                    var getUserDto = ReadUserFactory.GetUserDto(userEntity);
+
+                    if (getUserDto !=null) 
+                    {
+                        return new OkObjectResult(getUserDto);
+                    }
+                    else
+                    {
+                        return new StatusCodeResult(500);
+                    }
+                }
+                else
+                {
+                    return new NotFoundResult();
+                }
+            }
+            else
+            {
+                return new BadRequestResult();
+            }
+
+        }
+
         catch (Exception ex)
         {
             Debug.WriteLine("ERROR :: " + ex.Message);

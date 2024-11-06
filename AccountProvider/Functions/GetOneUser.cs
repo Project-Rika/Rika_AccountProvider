@@ -1,5 +1,4 @@
 ﻿using AccountProvider.Interfaces;
-using AccountProvider.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -10,12 +9,12 @@ namespace AccountProvider.Functions;
 public class GetOneUser
 {
     private readonly ILogger<GetOneUser> _logger;
-    private readonly UserRepository _repositry;
+    private readonly IUserService _userService;
 
-    public GetOneUser (ILogger<GetOneUser> logger, UserRepository repositry)
+    public GetOneUser (ILogger<GetOneUser> logger, IUserService userService)
     {
         _logger = logger;
-        _repositry = repositry;
+        _userService = userService;
     }
 
     [Function("GetOneUserAsync")]
@@ -30,7 +29,7 @@ public class GetOneUser
                 return new BadRequestObjectResult("UserId is required.");
             }
 
-            var user = await _repositry.GetUserAsync(u => u.Id == userId);
+            var user = await _userService.GetUserAsync(u => u.Id == userId);
 
             if (user == null)
             {
@@ -45,8 +44,9 @@ public class GetOneUser
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error while getting User");
-            return new BadRequestObjectResult("Error::" + ex.Message);
+            
         }
+        return new StatusCodeResult(500);
     }
 }
 
