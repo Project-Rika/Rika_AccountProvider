@@ -11,5 +11,8 @@ public interface IUserService
     Task<UserEntity?> GetUserByEmailAsync(string email);
     Task<IActionResult> CreateUserAsync(CreateUserDto createUserDto);
 
+	Task<IActionResult> DeleteUserAsync(string userId);
+
     Task<IActionResult> GetUserAsync(Expression<Func<UserEntity, bool>> predicate);
+
 }

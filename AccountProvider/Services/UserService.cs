@@ -105,6 +105,39 @@ public class UserService(DataContext context, IUserRepository userRepository) : 
         return new StatusCodeResult(500);
     }
 
+
+	public async Task<IActionResult> DeleteUserAsync(string userId)
+	{
+		try
+		{
+			if (userId != null)
+			{
+				var existingUser = await _userRepository.GetUserAsync(x => x.Id == userId);
+				if (existingUser != null)
+				{
+					var result = await _userRepository.DeleteUserAsync(existingUser);
+					if (result)
+					{
+						return new OkResult();
+					}
+				}
+				else
+				{
+					return new NotFoundResult();
+				}
+			}
+			else
+			{
+				return new BadRequestResult();
+			}
+		}
+		catch (Exception ex)
+		{
+			Debug.WriteLine("ERROR :: " + ex.Message);
+		}
+		return new StatusCodeResult(500);
+	}
+
     public async Task<IActionResult> GetUserAsync(Expression<Func<UserEntity, bool>> predicate)
     {
         try
@@ -145,5 +178,6 @@ public class UserService(DataContext context, IUserRepository userRepository) : 
         }
         return new StatusCodeResult(500);
     }
+
 }
 

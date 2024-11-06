@@ -10,4 +10,5 @@ public interface IUserRepository
     Task<UserEntity> GetUserAsync(Expression<Func<UserEntity, bool>> predicate);
     Task<UserEntity?>GetByEmailAsync(string email);
     Task CreateUserAsync(UserEntity user);
+	Task<bool> DeleteUserAsync(UserEntity userEntity);
 }
