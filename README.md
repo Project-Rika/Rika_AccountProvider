@@ -8,7 +8,12 @@
 ### Request Body
 
 ```json
-
+{
+  "FirstName": "string",
+  "LastName": "string",
+  "Email": "string",
+  "Password": "string"
+}
 
 ````
 
@@ -20,7 +25,26 @@
 ### Request Body
 
 ```json
-
+[
+  {
+    "UserId": "string",
+    "FirstName": "string",
+    "LastName": "string",
+    "Email": "string",
+    "PhoneNumber": "string",
+    "ProfileImageUrl": "string",
+    "Age": 0
+  },
+    {
+    "UserId": "string",
+    "FirstName": "string",
+    "LastName": "string",
+    "Email": "string",
+    "PhoneNumber": "string",
+    "ProfileImageUrl": "string",
+    "Age": 0
+  }
+]
 
 ````
 ## Hämta En Användare (`GetOneUserAsync`)
@@ -31,7 +55,15 @@
 ### Request Body
 
 ```json
-
+{
+  "UserId": "string",
+  "FirstName": "string",
+  "LastName": "string",
+  "Email": "string",
+  "PhoneNumber": "string",
+  "ProfileImageUrl": "string",
+  "Age": 0
+}
 
 ````
 
@@ -43,7 +75,15 @@
 ### Request Body
 
 ```json
-
+{
+  "UserId": "string",
+  "FirstName": "string",
+  "LastName": "string",
+  "Email": "string",
+  "PhoneNumber": "string",
+  "ProfileImageUrl": "string",
+  "Age": 0
+}
 
 ````
 
@@ -51,7 +91,3 @@
 
 **Endpoint:** `/api/DeleteUser`  
 **Metod:** `DELETE`
-
-### Request Body
-
-```json
