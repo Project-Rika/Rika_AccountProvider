@@ -30,11 +30,11 @@ public class UserRepository(DataContext context) : IUserRepository
 
     }
 
-    public async Task<UserEntity> GetUserAsync(Expression<Func<UserEntity, bool>> predciate)
+    public async Task<UserEntity> GetUserAsync(Expression<Func<UserEntity, bool>> predicate)
     {
         try
         {
-            var result = await _context.Users.FirstOrDefaultAsync(predciate);
+            var result = await _context.Users.FirstOrDefaultAsync(predicate);
             if (result != null)
             {
                 return result;

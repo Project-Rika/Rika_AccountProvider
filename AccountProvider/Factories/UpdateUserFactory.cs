@@ -15,11 +15,9 @@ public class UpdateUserFactory
 				userEntity.FirstName = updateUserDto.FirstName;
 				userEntity.LastName = updateUserDto.LastName;
 				userEntity.Email = updateUserDto.Email;
-				userEntity.Password = updateUserDto.Password!;
 				userEntity.PhoneNumber = updateUserDto.PhoneNumber;
 				userEntity.ProfileImageUrl = updateUserDto.ProfileImageUrl;
 				userEntity.Age = updateUserDto.Age;
-				userEntity.Gender = updateUserDto.Gender;
 
 				return userEntity;
 			}
@@ -42,11 +40,9 @@ public class UpdateUserFactory
 					FirstName = userEntity.FirstName,
 					LastName = userEntity.LastName,
 					Email = userEntity.Email,
-					Password = userEntity.Password!,
 					PhoneNumber = userEntity.PhoneNumber,
 					ProfileImageUrl = userEntity.ProfileImageUrl,
 					Age = userEntity.Age,
-					Gender = userEntity.Gender
 				};
 			}
 		}

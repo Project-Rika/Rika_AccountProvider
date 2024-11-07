@@ -19,7 +19,7 @@ namespace AccountProvider.Functions
 		}
 
         [Function("DeleteUser")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequest req)
         {
 			try
 			{

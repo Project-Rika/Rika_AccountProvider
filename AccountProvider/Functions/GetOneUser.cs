@@ -1,5 +1,6 @@
 ﻿using AccountProvider.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
@@ -29,17 +30,22 @@ public class GetOneUser
                 return new BadRequestObjectResult("UserId is required.");
             }
 
-            var user = await _userService.GetUserAsync(u => u.Id == userId);
+            var result = await _userService.GetUserAsync(u => u.Id == userId);
 
-            if (user == null)
+            switch (result)
             {
-                return new NotFoundObjectResult("User not found.");
-            }
-            else
-            {
-                return new OkObjectResult(user);
-            }
-           
+                case OkObjectResult okResult:
+                    return new OkObjectResult(okResult.Value);
+
+                case NotFoundResult:
+                    return new NotFoundObjectResult("User not found.");
+
+                case BadRequestResult:
+                    return new BadRequestResult();
+
+                default:
+                    return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }          
         }
         catch (Exception ex)
         {
