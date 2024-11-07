@@ -1,8 +1,8 @@
 # API Dokumentation För Rika_AccountProvider
 
-## Skapa User (`CreateUser`)
+## Create User (`CreateUser`)
 
-**Endpoint:** `/api/CreateUser`  
+**Endpoint:** `https://accountprovider.azurewebsites.net/api/CreateUser?code={apiKey}`  
 **Metod:** `POST`
 
 ### Request Body
@@ -17,59 +17,23 @@
 
 ````
 
-## Hämta Alla Användare (`GetAllUsers`)
+## Get All Users (`GetAllUsers`)
 
-**Endpoint:** `/api/GetUsers`  
+**Endpoint:** `https://accountprovider.azurewebsites.net/api/GetUsers?code={apiKey}`  
 **Metod:** `GET`
 
-### Request Body
+(No functionality exists yet)
 
-```json
-[
-  {
-    "UserId": "string",
-    "FirstName": "string",
-    "LastName": "string",
-    "Email": "string",
-    "PhoneNumber": "string",
-    "ProfileImageUrl": "string",
-    "Age": 0
-  },
-  {
-    "UserId": "string",
-    "FirstName": "string",
-    "LastName": "string",
-    "Email": "string",
-    "PhoneNumber": "string",
-    "ProfileImageUrl": "string",
-    "Age": 0
-  }
-]
+## Get One User (`GetOneUserAsync`)
 
-````
-## Hämta En Användare (`GetOneUserAsync`)
-
-**Endpoint:** `/api/GetOneUserAsync/{id}`  
+**Endpoint:** `https://accountprovider.azurewebsites.net/api/GetOneUserAsync?UserId={userId}&code={apiKey}`  
 **Metod:** `GET`
 
-### Request Body
+To get a user send a GET http request with query param "UserId".
 
-```json
-{
-  "UserId": "string",
-  "FirstName": "string",
-  "LastName": "string",
-  "Email": "string",
-  "PhoneNumber": "string",
-  "ProfileImageUrl": "string",
-  "Age": 0
-}
+## Update User (`UpdateUser`)
 
-````
-
-## Uppdatera En Användare (`UpdateUser`)
-
-**Endpoint:** `/api/UpdateUser`  
+**Endpoint:** `https://accountprovider.azurewebsites.net/api/UpdateUser?code={apiKey}`
 **Metod:** `PUT`
 
 ### Request Body
@@ -87,7 +51,7 @@
 
 ````
 
-## Ta Bort En Användare (`DeleteUser`)
+## Delete User (`DeleteUser`)
 
-**Endpoint:** `/api/DeleteUser/{id}`  
+**Endpoint:** `https://accountprovider.azurewebsites.net/api/DeleteUser?UserId={userId}&code={apiKey}`  
 **Metod:** `DELETE`
