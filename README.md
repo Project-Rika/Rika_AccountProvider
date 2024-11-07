@@ -22,7 +22,6 @@
 **Endpoint:** `https://accountprovider.azurewebsites.net/api/GetUsers?code={apiKey}`  
 **Metod:** `GET`
 
-(No functionality exists yet)
 
 ## Get One User (`GetOneUserAsync`)
 
