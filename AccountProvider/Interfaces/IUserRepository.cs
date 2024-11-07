@@ -11,4 +11,5 @@ public interface IUserRepository
     Task<IEnumerable<UserEntity>> GetAllUsersAsync();
     Task<UserEntity?>GetByEmailAsync(string email);
     Task CreateUserAsync(UserEntity user);
+	Task<bool> DeleteUserAsync(UserEntity userEntity);
 }

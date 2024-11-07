@@ -30,16 +30,26 @@ public class UserRepository(DataContext context) : IUserRepository
 
     }
 
-    public async Task<UserEntity> GetUserAsync(Expression<Func<UserEntity, bool>> predciate)
+    public async Task<UserEntity> GetUserAsync(Expression<Func<UserEntity, bool>> predicate)
     {
         try
         {
-            var result = await _context.Users.FirstOrDefaultAsync(predciate);
-            return result;
+            var result = await _context.Users.FirstOrDefaultAsync(predicate);
+            if (result != null)
+            {
+                return result;
+
+            }
+            else
+            {
+                return null!;
+            }
+
         }
         catch (Exception ex)
         {
-            return null;
+            Console.WriteLine(ex.Message);
+            throw new Exception("Something went wrong", ex);
         }
     }
 
@@ -60,7 +70,7 @@ public class UserRepository(DataContext context) : IUserRepository
         }
         catch (Exception ex)
         {
-           Debug.WriteLine("ERROR :: " + ex.Message);
+            Debug.WriteLine("ERROR :: " + ex.Message);
         }
 
         return null;
@@ -79,5 +89,32 @@ public class UserRepository(DataContext context) : IUserRepository
 
         return Enumerable.Empty<UserEntity>();
     }
+
+	public async Task<bool> DeleteUserAsync(UserEntity userEntity)
+	{
+		try
+		{
+			if (userEntity != null)
+			{
+				_context.Users.Remove(userEntity);
+				var result = await _context.SaveChangesAsync();
+
+				if (result > 0)
+				{
+					return true;
+				}
+                else
+                {
+                    return false;
+                }
+			}
+		}
+		catch (Exception ex)
+		{
+			Debug.WriteLine("ERROR :: " + ex.Message);
+		}
+
+		return false;
+	}
 }
 

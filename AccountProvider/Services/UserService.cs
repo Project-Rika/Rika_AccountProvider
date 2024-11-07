@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Text;
 using System.Security.Cryptography;
+using System.Linq.Expressions;
 
 namespace AccountProvider.Services;
 
@@ -134,6 +135,79 @@ public class UserService(DataContext context, IUserRepository userRepository) : 
             return null!;
         }
 
+    }
+
+	public async Task<IActionResult> DeleteUserAsync(string userId)
+	{
+		try
+		{
+			if (userId != null)
+			{
+				var existingUser = await _userRepository.GetUserAsync(x => x.Id == userId);
+				if (existingUser != null)
+				{
+					var result = await _userRepository.DeleteUserAsync(existingUser);
+					if (result)
+					{
+						return new OkResult();
+					}
+				}
+				else
+				{
+					return new NotFoundResult();
+				}
+			}
+			else
+			{
+				return new BadRequestResult();
+			}
+		}
+		catch (Exception ex)
+		{
+			Debug.WriteLine("ERROR :: " + ex.Message);
+		}
+		return new StatusCodeResult(500);
+	}
+
+    public async Task<IActionResult> GetUserAsync(Expression<Func<UserEntity, bool>> predicate)
+    {
+        try
+        {
+
+            if (predicate != null)
+            {
+                var userEntity = await _userRepository.GetUserAsync(predicate);
+
+                if (userEntity != null) 
+                {
+                    var getUserDto = ReadUserFactory.GetUserDto(userEntity);
+
+                    if (getUserDto !=null) 
+                    {
+                        return new OkObjectResult(getUserDto);
+                    }
+                    else
+                    {
+                        return new StatusCodeResult(500);
+                    }
+                }
+                else
+                {
+                    return new NotFoundResult();
+                }
+            }
+            else
+            {
+                return new BadRequestResult();
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            Debug.WriteLine("ERROR :: " + ex.Message);
+        }
+        return new StatusCodeResult(500);
     }
 }
 
