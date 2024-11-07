@@ -35,7 +35,7 @@
     "ProfileImageUrl": "string",
     "Age": 0
   },
-    {
+  {
     "UserId": "string",
     "FirstName": "string",
     "LastName": "string",
@@ -89,5 +89,5 @@
 
 ## Ta Bort En Användare (`DeleteUser`)
 
-**Endpoint:** `/api/DeleteUser`  
+**Endpoint:** `/api/DeleteUser/{id}`  
 **Metod:** `DELETE`
