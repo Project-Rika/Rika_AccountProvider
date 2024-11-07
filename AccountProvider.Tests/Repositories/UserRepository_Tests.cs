@@ -70,6 +70,7 @@ public class UserRepository_Tests
         Assert.Equal("400", statusCode);
 	}
 
+    [Fact]
     public async Task GetByEmailAsync_ShouldReturnUser_WhenUserExists()
     {
         // Arrange
@@ -253,5 +254,64 @@ public class UserRepository_Tests
 
         // Assert
         Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task GetAllUsersAsync_ShouldReturnListOfUsersAndStatusCode()
+    {
+        // Arrange
+        var users = new List<UserEntity>
+        {
+            new UserEntity { Id = "1", Gender = "Male", Email = "william@domain.com" },
+            new UserEntity { Id = "2", Gender = "Female", Email = "gustavia@domain.com" }
+        };
+
+        // Act
+        var userEntity = new UserEntity
+        {
+            Id = "1",
+            FirstName = "William",
+            LastName = "Hägg"
+        };
+        _mockUserRepository.Setup(x => x.GetAllUsersAsync()).ReturnsAsync(new List<UserEntity> { userEntity });
+
+        var result = await _mockUserRepository.Object.GetAllUsersAsync();
+
+        var statusCode = "";
+        if (result == null)
+        {
+            statusCode = "400";
+        }
+        else
+        {
+            statusCode = "200";
+        }
+
+        // Assert
+
+        Assert.NotNull(result);
+        Assert.IsType<List<UserEntity>>(result);
+        Assert.Equal("200", statusCode);
+    }
+
+    [Fact]
+    public async Task GetAllUsersAsync_CouldNotGetListOfUsers()
+    {
+        _mockUserRepository.Setup(x => x.GetAllUsersAsync()).ReturnsAsync(new List<UserEntity>());
+        var result = await _mockUserRepository.Object.GetAllUsersAsync();
+
+        var statusCode = "";
+        if (result == null)
+        {
+            statusCode = "200";
+        }
+        else
+        {
+            statusCode = "400";
+        }
+
+        Assert.NotNull(result);
+        Assert.Empty(result);
+        Assert.Equal("400", statusCode);
     }
 }

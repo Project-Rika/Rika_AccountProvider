@@ -211,6 +211,68 @@ public class UserService_Tests
 		var okResult = Assert.IsType<BadRequestResult>(result);
 		Assert.Equal(400, okResult.StatusCode);
 	}
+
+
+    [Fact]
+    public async Task GetAllUsersAsync_ShouldReturnList()
+    {
+        // Arrange
+        var users = new List<GetUserDto>
+        {
+            new GetUserDto {UserId = "1", Gender = "Male", Email = "William@domain.com"},
+
+
+             new GetUserDto {UserId = "2", Gender = "Female", Email = "gustavia@domain.com"}
+        };
+
+        // Act
+        var getUserDto = new GetUserDto
+        {
+            UserId = "1",
+            FirstName = "William",
+            LastName = "Hägg"
+        };
+
+        _mockUserService.Setup(x => x.GetAllUsersAsync()).ReturnsAsync(new List<GetUserDto> { getUserDto });
+
+        var result = await _mockUserService.Object.GetAllUsersAsync();
+        var statusCode = "";
+        if (result != null)
+        {
+            statusCode = "200";
+        }
+        else
+        {
+            statusCode = "400";
+        }
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.IsType<List<GetUserDto>>(result);
+        Assert.Equal("200", statusCode);
+    }
+
+    [Fact]
+    public async Task GetAllUsersAsync_CouldNotGetListOfUsers()
+    {
+        _mockUserService.Setup(x => x.GetAllUsersAsync()).ReturnsAsync(new List<GetUserDto>());
+
+        var result = await _mockUserService.Object.GetAllUsersAsync();
+
+        var statusCode = "";
+        if (result == null)
+        {
+            statusCode = "200";
+        }
+        else
+        {
+            statusCode = "400";
+        }
+
+        Assert.NotNull(result);
+        Assert.Empty(result);
+        Assert.Equal("400", statusCode);
+    }
 }
 
 

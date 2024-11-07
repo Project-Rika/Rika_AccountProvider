@@ -105,6 +105,37 @@ public class UserService(DataContext context, IUserRepository userRepository) : 
         return new StatusCodeResult(500);
     }
 
+    public async Task<IEnumerable<GetUserDto>> GetAllUsersAsync()
+    {
+        try
+        {
+            var userEntities = await _userRepository.GetAllUsersAsync();
+
+            if (userEntities == null || !userEntities.Any())
+            {
+                return Enumerable.Empty<GetUserDto>();
+            }
+
+            var userDtos = userEntities.Select(user => new GetUserDto
+            {
+                UserId = user.Id,
+                FirstName = user.FirstName ?? "Inte angiven",
+                LastName = user.LastName ?? "Inte angiven",
+                Email = user.Email ?? "Inte angiven",
+                PhoneNumber = user.PhoneNumber ?? "Inte angiven",
+                ProfileImageUrl = user.ProfileImageUrl ?? "Inte angiven",
+                Gender = user.Gender ?? "Inte angiven",
+                Age = user.Age
+			});
+            return userDtos;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"ERROR :: {ex.Message}");
+            return null!;
+        }
+
+    }
 
 	public async Task<IActionResult> DeleteUserAsync(string userId)
 	{
@@ -178,6 +209,5 @@ public class UserService(DataContext context, IUserRepository userRepository) : 
         }
         return new StatusCodeResult(500);
     }
-
 }
 
